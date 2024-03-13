@@ -1,10 +1,10 @@
-import * as vscode from "vscode";
-import { createStyledComponent } from "./utils";
+import * as vscode from 'vscode';
+import { createStyledComponent } from './utils';
 
 export const command = vscode.commands.registerCommand(
-  "dev-tools.createInStylesFile",
+  'dev-tools.createInStylesFile',
   async () => {
-    const styledComponent = createStyledComponent();
+    const styledComponent = await createStyledComponent();
     if (styledComponent) {
       // assumes styles file name is the same as the component file
       const currentlyOpenTabFilePath =
@@ -15,8 +15,8 @@ export const command = vscode.commands.registerCommand(
       const currentDocumentUri = vscode.window.activeTextEditor?.document.uri;
       if (!currentDocumentUri) return;
       let currentFolder = currentDocumentUri.path.replace(
-        ".tsx",
-        ".styles.tsx"
+        '.tsx',
+        '.styles.tsx'
       );
       const stylesFileUri = vscode.Uri.parse(currentFolder);
 
@@ -26,13 +26,13 @@ export const command = vscode.commands.registerCommand(
         await addComponentToExport(stylesFileUri, styledComponent);
         await addSCToExistingFile(stylesFileUri, styledComponent);
         vscode.window.showInformationMessage(
-          "Styled component created in styles file!"
+          'Styled component created in styles file!'
         );
       } catch (error) {
         // if file doesnt exist then create it
         addSCToNewStylesfile(stylesFileUri, styledComponent);
         vscode.window.showInformationMessage(
-          "Styled component created in new styles file!"
+          'Styled component created in new styles file!'
         );
       }
     }
@@ -48,9 +48,9 @@ const addSCToExistingFile = async (
 ) => {
   const stylesFile = await vscode.workspace.fs.readFile(stylesFileUri);
 
-  const stylesFilesTextArray = stylesFile.toString().split("\n");
+  const stylesFilesTextArray = stylesFile.toString().split('\n');
   const exportLineIndex = stylesFilesTextArray.findIndex((line) =>
-    line.includes("export default")
+    line.includes('export default')
   );
 
   const componentAddition = ` \n${styledComponent.styledComponent}\n`;
@@ -67,7 +67,7 @@ const addSCToExistingFile = async (
     if (success) {
       // sucess message
     } else {
-      vscode.window.showInformationMessage("Error!");
+      vscode.window.showInformationMessage('Error!');
     }
   });
 
@@ -84,16 +84,16 @@ const addComponentToExport = async (
   // update existing file
   const stylesFile = await vscode.workspace.fs.readFile(stylesFileUri);
 
-  const stylesFilesTextArray = stylesFile.toString().split("\n");
+  const stylesFilesTextArray = stylesFile.toString().split('\n');
   const exportLineIndex = stylesFilesTextArray.findIndex((line) =>
-    line.includes("export default")
+    line.includes('export default')
   );
 
   const componentAddition = ` \n${styledComponent.styledComponentName},`;
 
   // after bracket
   const exportLineOpenBracket =
-    stylesFilesTextArray[exportLineIndex].indexOf("{") + 1;
+    stylesFilesTextArray[exportLineIndex].indexOf('{') + 1;
 
   const wsedit = new vscode.WorkspaceEdit();
 
@@ -129,7 +129,7 @@ const addSCToNewStylesfile = (
     if (success) {
       // sucess message
     } else {
-      vscode.window.showInformationMessage("Error!");
+      vscode.window.showInformationMessage('Error!');
     }
   });
 };

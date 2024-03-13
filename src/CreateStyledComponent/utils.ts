@@ -1,10 +1,10 @@
-import * as vscode from "vscode";
+import * as vscode from 'vscode';
 
-export const createStyledComponent = () => {
+export const createStyledComponent = async () => {
   const highlighted = getHighlightedText();
   if (!highlighted) return;
 
-  return createStyledComponentString(highlighted);
+  return await createStyledComponentString(highlighted);
 };
 
 const getHighlightedText = () => {
@@ -22,8 +22,8 @@ const getHighlightedText = () => {
   }
 };
 
-const createStyledComponentString = (text: string) => {
-  const textNoLineBreaks = text.replace(/(\r\n|\n|\r)/gm, "");
+const createStyledComponentString = async (text: string) => {
+  const textNoLineBreaks = text.replace(/(\r\n|\n|\r)/gm, '');
   const htmlTag = textNoLineBreaks.match(/<[a-zA-Z]+(>|.*?[^?]>)/);
   if (htmlTag) {
     const tagType = htmlTag![0].match(/<([^\s>]+)(\s|>)+/);
@@ -33,7 +33,14 @@ const createStyledComponentString = (text: string) => {
     );
 
     if (tagType && tagType[1] && classNames && classNames[1]) {
-      const styledComponentName = "NewStyledComponent";
+      const styledComponentNameInput = await vscode.window.showInputBox({
+        placeHolder: 'Enter Component Name',
+      });
+
+      const styledComponentName = styledComponentNameInput
+        ? styledComponentNameInput.replaceAll(' ', '')
+        : 'NewStyledComponent';
+
       const twinMacroClasses = `\$\{tw\`${classNames[1]}\`\}`;
       const styledComponent = `const ${styledComponentName} = styled.${tagType[1]}\`${twinMacroClasses}\`;`;
       return { styledComponent, styledComponentName };

@@ -7,3 +7,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [Unreleased]
 
 - Initial release
+
+## [0.1.0] - 13-03-2023
+
+### Added
+
+- Allow users to set styled component name. Input field when activating styled component conversion commands.

@@ -1,9 +1,9 @@
 {
   "name": "kash-dev-tools",
-  "author" : "Kash Pitan",
+  "author": "Kash Pitan",
   "displayName": "dev-tools",
   "description": "A set of tools to assist development",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.87.0"
   },
